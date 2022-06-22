@@ -67,7 +67,7 @@ commands = python test.py
 
 Our action uses a pip cache from `actions/setup-python`.
 This fails when the `requirements.txt` file is missing.
-So you must have this file, but it our example it is empty.
+So you must have this file, but in our example it is empty.
 
 
 # Advanced example
