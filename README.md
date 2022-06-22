@@ -9,6 +9,67 @@ If buildout is not used, the egg cache is useless, but should be harmless.
 Created by Maurits van Rees.
 Currently trying this out in https://github.com/zestsoftware/collective.multisearch/pull/6
 
+# Simple example
+
+This is copied from the files in this repository that we use to test the action itself.
+We test two Python versions.
+For each version we run one tox environment.
+We simply call `python test.py`.
+
+## .github/workflows/tests.yml
+
+```
+name: CI
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+  workflow_dispatch:
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.9", "3.10"]
+    steps:
+      - name: Test Py ${{ matrix.python-version }}
+        uses: collective/tox-action@main
+        with:
+          python-version: ${{ matrix.python-version }}
+```
+
+## tox.ini
+
+**Important**: You **MUST** have a `gh-actions` section, otherwise no tests are run.
+You will see `Run tox --skip-missing-interpreters=false` and then nothing. The job will be marked as success, but no tests will have been run.
+
+```
+# Tox file so we can test ourselves.
+[tox]
+envlist = py{39,310}
+skip_missing_interpreters = True
+
+[gh-actions]
+# See https://pypi.org/project/tox-gh-actions/
+python =
+    3.9: py39
+    3.10: py310
+
+[testenv]
+skip_install = true
+commands = python test.py
+```
+
+## requirements.txt
+
+Our action uses a pip cache from `actions/setup-python`.
+This fails when the `requirements.txt` file is missing.
+So you must have this file, but it our example it is empty.
+
+
 # Advanced example
 
 In this example we will test Plone 5.2 and Plone 6 using Buildout on Python 2.7 and various Python 3 versions.
