@@ -12,9 +12,9 @@ branding:
 runs:
   using: "composite"
   steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v7
   - name: Set up Python
-    uses: actions/setup-python@v4
+    uses: actions/setup-python@v7.0.0
     with:
       python-version: ${{ matrix.python-version }}
       cache: 'pip'
@@ -30,7 +30,7 @@ runs:
       echo "[buildout]" >> ~/.buildout/default.cfg
       echo "eggs-directory = ~/eggs" >> ~/.buildout/default.cfg
   - name: Cache eggs
-    uses: actions/cache@v3
+    uses: actions/cache@v6.1.0
     with:
       path: ~/eggs
       key: ${{ runner.os }}-eggs-${{ matrix.python-version }}-${{ hashFiles('*cfg') }}
